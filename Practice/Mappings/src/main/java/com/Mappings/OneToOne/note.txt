@@ -1,0 +1,52 @@
+public class User {
+    @Id
+    private int userid;
+    private String username;
+    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @JoinColumn( name = "address_id", referencedColumnName = "addressid")
+    @JsonManagedReference
+    private UserAddress userAddress;
+    }
+
+  - cascade = CascadeType.ALL :- Whatever operations you will perform on parent it will be performed on child as well like persists, remove, update , etc.,
+  - fetch = FetchType.EAGER :- When you load the parent object, child object will also load immediately.
+  - fetch = FetchType.LAZY :- When you load the parent object, child object will Not load immediately.
+  - @JoinColumn( name = "address_id", referencedColumnName = "addressid"):- we usually use it on parent side.
+                                                                            If you want to use custom names for your joining column then we use it.
+                                                                            here 'name' can be anything. i.e. tumhala je name havay tya column ch te name.
+                                                                            here 'referencedColumnName' is ki jya column la tumhi refer karat ahat tya column ch name.
+
+-@JsonManagedReference
+Ye forward part ko serialize kar deta hai (Parent → Child)
+
+  Saath me @JsonBackReference wala ignore ho jata hai (Child → Parent ko JSON me nahi bhejta)
+
+  Isse recursion ka problem solve ho jata hai.
+
+
+
+
+
+
+  public class UserAddress {
+      @Id
+      private int addressid;
+      private String state;
+      private String contry;
+      @OneToOne(mappedBy = "userAddress", fetch = FetchType.EAGER)// ithe Lazy pn asu shakt
+      @JsonBackReference
+      private User user;
+  }
+
+
+  - mapped by :- We give to show that this is non-owner side.
+                  jya table chi foreign key bannar aste tya table ch name deto ususally.
+
+
+Default laoding:-
+1-->M = lazy
+m --> M = lazy
+1-->1 = Eager
+M-->1 = Eager
+
+- Usually In one to many owner side many wale ko rehti hai
