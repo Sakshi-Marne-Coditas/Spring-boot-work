@@ -9,7 +9,7 @@ public class UserAddress {
     private int addressid;
     private String state;
     private String contry;
-    @OneToOne(mappedBy = "userAddress", fetch = FetchType.EAGER)
+    @OneToOne(mappedBy = "userAddress", fetch = FetchType.EAGER)// ithe Lazy pn asu shakt
     @JsonBackReference
     private User user;
 
